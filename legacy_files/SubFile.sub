@@ -1,0 +1,13 @@
+#!/bin/bash
+#SBATCH --job-name=sub
+#SBATCH --output=/home/hk-project-p0022320/wb2359/Projects/coreas/runs/logs/log%j.out
+#SBATCH --error=/home/hk-project-p0022320/wb2359/Projects/coreas/runs/logs/log%j.err
+#SBATCH --nodes=2
+#SBATCH --cpus-per-task=12
+#SBATCH --time=03:00:00
+#SBATCH --tasks=2
+######SBATCH --mem=50gb
+######SBATCH --export=NONE
+#######################SBATCH --gres=gpu:4
+
+/home/hk-project-p0022320/wb2359/Projects/coreas/CoreasSpellcaster/corsikaSim.sh

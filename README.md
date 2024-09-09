@@ -2,87 +2,80 @@
 Unleash the magic of simultaneous shower simulations with this Coreas generator.
 
 ### Author
-Jelena Köhler @jelenakhlr\
+Keito Watanabe @kwat0308\
+@date: September 2024
+
+Forked from Jelena Köhler @jelenakhlr\
 @date: January 2024
 
 original version by @fedbont94\
 forked from https://github.com/fedbont94/Horeka
 
-## Before you start
-1. Select the proper branch\
-_"radio_mpi"_ for the mpi version\
-_"radio_classic"_ for the non-mpi version
+## Installation
 
-2. Compile the version of Corsika you need\
-for mpi: Make sure to use the **PARALLEL** option and to compile with **MPILIBRARY**\
-(do not use these for non-mpi)\
-\
-For more info, see the **Corsika** manual: https://web.iap.kit.edu/corsika/usersguide/usersguide.pdf \
-and the **Coreas** manual: https://web.ikp.kit.edu/huege/downloads/coreas-manual.pdf
+The spellcaster can now be readily installed via pip:
+```
+pip install coreas_spellcaster
+```
 
-4. Make sure you have all relevant python packages
-You can get **miniradiotools** from https://github.com/jelenakhlr/miniradiotools
-(only needed to _create_ starshapes. You can also load antenna positions directly from a file instead.)
+This will install the necessary dependencies:
+- `numpy`
 
-5. Check paths:\
-When using these scripts, make sure to modify paths, usernames, etc. in these files:\
-\
-*SubFile.sub*\
-*corsikaSim.sh*\
-*ExecuteSubfile.sh*\
-*utils/FileWriter.py*\
-*MakeCorsikaSim.py*\
-\
-Also check if you need to modify things in\
-\
-*utils/RadioFilesGenerator.py*\
-*utils/SimulationMaker.py*
+## Optional Dependencies
 
-6. Select your antenna layout\
-   Inside _utils/RadioFilesGenerator.py_, select or adapt the antenna layout.\
+- [miniradiotools](https://github.com/jelenakhlr/miniradiotools) : for using star-shaped antenna layout
 
-## How to run
-### Submit a whole batch of showers
-Once you have set all paths and input values according to your needs, simply run
+## Usage
 
-./ExecuteSubFile.sh
+1. Compile the version of Corsika you need\
+for mpi: Make sure to use the **PARALLEL** option and to compile with **MPILIBRARY** (do not use these for non-mpi)
 
-### Submit a single shower
-If you want to go rogue and manually submit a shower, you need to make sure you have the sub file and the inp, reas and list file ready.\
-Then you can submit the sub file on Horeka (or the cluster of your preference) using the command:
+   For more info, see the [**Corsika** manual](https://web.iap.kit.edu/corsika/usersguide/usersguide.pdf) and the [**Coreas** manual](https://web.ikp.kit.edu/huege/downloads/coreas-manual.pdf).
 
-sbatch -p cpuonly -A <your project> ./SIMxxxxxx.sub
+2. Run `generate_and_submit_subfile.py` to generate and submit the `submit.sh` file. 
+
+   **NB: the submit file is configured for a SLURM batch system. Other batch systems (e.g. HTcondor) will be implemented in the future.**
+
+   Here, the following should be specified:
+   - `--username` : your username in the batch system
+   - `--dirSimulations` : the directory to where the simulations are stored
+   - `--pathCorsika` : the path to the corsika run directory ("$CORSIKA_PATH/runs")
+   - `--corsikaExec` : the executable for corsika
+   - `--antenna_type` : the type of antenna layout to use. Either `random` or `starshape` is available for now.
+
+   The relevant input parameters can be modified in `input_file.txt`.
+
+   To test the implementation, one can use the `--dryrun` flag to write the submission script, and `--debug` to run on a development partition.
+
+Running this should submit a script that manages the corsika simulations, gathers the outputs, and sort them in a coherent manner.
 
 ## General Information
 by @fedbont94
 
-_ExecuteSubFile.sh_ - Is an executable that submits on slurm (Horeka cluster) the SubFile.sub \
-_SubFile.sub_ -       Contains all the requests in terms of memory, time, node... for the cluster\
-                    It loads .bashrc (can be taken out if not necessary)\
-                    It cd in the corsika/run/ folder, you may need to change the path\
-                    It calls the python script with all arguments that need to be passed and MUST be adapted to your interests.
-
-_MakeCorsikaSim.py_ - Is the main script that for Corsika air shower simulation (more documentation in the script)
-_MakeDetectorResponse.py_ - Is the main script that for detector response simulation (more documentation in the script)
+`MakeCorsikaSim.py` - Is the main script that for Corsika air shower simulation (more documentation in the script) \
+`MakeDetectorResponse.py` - Is the main script that for detector response simulation (more documentation in the script)
 
 
-_utils/FileWriter.py_ -       Contains a class that can be used to create and write a Corsika inp file and create "data", "temp", "log", "inp" folders. \
+`utils/FileWriter.py` -       Contains a class that can be used to create and write a Corsika inp file and create "data", "temp", "log", "inp" folders. \
                             (more documentation in the script)
 
                             
-_utils/SimulationMaker.py_ -  Contains a class that can be used for generating the submission stings and sh executable files. \
+`utils/SimulationMaker.py` -  Contains a class that can be used for generating the submission stings and sh executable files. \
                             It also has the generator function which yields the keys and string to submit, 
                             made via the combinations of file and energies \
                             (more documentation in the script)
 
                             
-_utils/Submitter.py_ -        Contains a class that can be used to spawns subprocesses for multiple instances instead of multiple job submissions.
+`utils/Submitter.py` -        Contains a class that can be used to spawns subprocesses for multiple instances instead of multiple job submissions.
                             (more documentation in the script)\
                             
 
-_utils/DetectorSimulator.py_ - Contains a class that can be used to simulate the detector response for a given corsika file. \
+`utils/DetectorSimulator.py` - Contains a class that can be used to simulate the detector response for a given corsika file. \
                             (more documentation in the script)
                             
                             
-_utils/MultiProcesses.py_ -   Contains a class that can be used to spawn multiple processes for the detector response simulation. \
+`utils/MultiProcesses.py` -   Contains a class that can be used to spawn multiple processes for the detector response simulation. \
                             (more documentation in the script)
+
+## LICENSE
+This work is under the BSD-3 LICENSE. See [LICENSE](./LICENSE) for details.

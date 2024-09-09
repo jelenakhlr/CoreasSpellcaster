@@ -1,0 +1,2 @@
+primary startNumber endNumber    energyStart energyEnd    energyStep  zenithStart   zenithEnd  obslev
+14  0   1   8.0 8.2    0.2 65  65  120000
