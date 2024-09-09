@@ -62,6 +62,19 @@ def __checkInputs(args):
         import warnings
         warnings.warn("The program is not stopped, \
             but aware that the Corsika seed number is exceeding 900.000.000 (the max allowed value)")
+        
+    # verify that the filepaths are setup correctly, if not raise an error
+    if not os.path.exists(args.dirSimulations):
+        raise NotADirectoryError(f"Directory {args.dirSimulations} does not exist, please create it!")
+    
+    if not os.path.exists(args.pathCorsika):
+        raise NotADirectoryError(f"Directory {args.pathCorsika} does not exist, unpack corsika package to this path!")
+    
+    if not os.path.exists(os.path.join(args.pathCorsika, args.corsikaExe)):
+        raise FileNotFoundError(f"Corsika executable {args.corsikaExe} not found, check if you compiled the executable correctly.")
+    
+    if not os.path.exists(args.pathAntennas):
+        raise FileNotFoundError(f"Antenna file {args.pathAntennas} does not exist, create antenna list with this name or check the data directory.")
     return
 
 
@@ -115,6 +128,8 @@ def mainCorsikaSim(args):
         obslev =args.obslev,
 
         pathAntennas=args.pathAntennas,
+        pathCorsika = args.pathCorsika,
+        corsikaExe = args.corsikaExe,
     )
 
     simMaker = SimulationMaker(
@@ -131,12 +146,13 @@ def mainCorsikaSim(args):
 
         primary_particle = args.primary,
         directory = args.dirSimulations,
+        antenna_type=args.antenna_type,
     )
 
     submitter = Submitter(
         MakeKeySubString=simMaker.generator,
         parallel_sim=args.parallelSim,
-        logDir=args.dirSimulations+"/logs",
+        logDir=os.path.join(args.dirSimulations, "logs"),
     )
 
     # Starts the spawn of the simulations
@@ -150,6 +166,8 @@ def mainCorsikaSim(args):
 if __name__ == "__main__":
 
     import argparse
+
+    dir_name = os.path.dirname(os.path.realpath(__name__))
 
     parser = argparse.ArgumentParser(
         description="Inputs for the Corsika Simulation Maker"
@@ -171,13 +189,13 @@ if __name__ == "__main__":
     parser.add_argument(
         "--dirSimulations",
         type=str,
-        default="/hkfs/work/workspace/scratch/bg5912-radiosims/GP300/",
+        default=os.path.join(dir_name, "..", "outputs"),
         help="Directory where the simulation are stored",
     )
     parser.add_argument(
         "--pathCorsika",
         type=str,
-        default="/home/hk-project-radiohfi/bg5912/work/soft/corsika-77550/run/",
+        default=os.path.join(dir_name, "..", "corsika-77550", "run"),
         help="the /run directory where the executable of corsika is located",
     )
     parser.add_argument(
@@ -242,7 +260,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--pathAntennas",
         type=str,
-        default="/home/hk-project-radiohfi/bg5912/CoreasSpellcaster/utils/gp300.list",
+        default=os.path.join(dir_name, "data", "gp300.list"),
         help="the directory where the antenna position file is located"
     )
 
@@ -251,6 +269,14 @@ if __name__ == "__main__":
         type=int,
         default=1,
         help="Number of parallel simulation processes - DO NOT USE WITH MPI",
+    )
+
+    parser.add_argument(
+        "--antenna_type",
+        type=str,
+        default="random",
+        help="Type of antenna layout to use. Default is random, randomly distributing the GP300 antennas.",
+        choices=["random", "starshape"]
     )
 
     args = parser.parse_args()

@@ -23,6 +23,8 @@ import os
 
 class RadioFilesGenerator:
 
+    _antenna_configs = ["random", "star_shaped"]
+
     def __init__(self,
         directory,                  # inp directory
         obslev,                     # Observation level in cm
@@ -47,6 +49,7 @@ class RadioFilesGenerator:
         self.antennaInfo = {}
         self.starshapeInfo = {}
 
+        # print a warning message if miniradiotools is not installed, and simply skip running star-shaped antennas
         if not mrtools:
             print("miniradiotools is not installed. Please install to use the star-shape pattern layout.")
         self._use_mrtools = mrtools
@@ -108,8 +111,7 @@ class RadioFilesGenerator:
             )
 
 
-
-    def get_antennaPositions(self):
+    def _get_random_positions(self):
         """
         Get gp300 positions from gp00.list and move them in x and y.
         .list files are structured like "AntennaPosition = x y z name"
@@ -142,7 +144,7 @@ class RadioFilesGenerator:
 
 
 
-    def get_starshapes(self):
+    def _get_star_shape_positions(self):
         """
         get starshape positions from starshapes.list
         .list files are structured like "AntennaPosition = x y z name"
@@ -222,11 +224,23 @@ class RadioFilesGenerator:
             print("***** Summoning GP300 antennas *****")
             for i in range(self.antennaInfo["x"].shape[0]):
                 f.write(f"AntennaPosition = {self.antennaInfo['x'][i]} {self.antennaInfo['y'][i]} 120000 {self.antennaInfo['name'][i]}\n") 
+                
 
-    def writeReasList(self):
+    def writeReasList(self, antenna_type : str = "random"):
         # define this to make it easier to call the functions
 
         self.reasWriter()
-        self.get_antennaPositions()
-        # self.get_starshapes()
+
+        # get the positions of the antennas for detection
+        assert antenna_type in self._antenna_configs, f"Antenna type {antenna_type} is not a valid antenna configuration."
+
+        if antenna_type == "random":
+            self._get_random_positions()
+        elif antenna_type == "starshape":
+            # raise exception if miniradiotools is not installed
+            if not self._use_mrtools:
+                raise ImportError("miniradiotools is required to get star-shaped positions!")
+            self._get_star_shape_positions()
+
+
         self.listWriter()
