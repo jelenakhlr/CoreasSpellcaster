@@ -32,6 +32,8 @@ class FileWriter:
         pathAntennas,                   # Path to antennas
         zenithStart,
         zenithEnd,
+        pathCorsika,                    # Path to corsika runs directory
+        corsikaExe,                     # executable for corsika simulation
     ):
         self.username = username
         self.primary = primary
@@ -43,10 +45,12 @@ class FileWriter:
         self.zenithEnd = zenithEnd
         self.obslev = obslev
         self.pathAntennas = pathAntennas
+        self.pathCorsika = pathCorsika
+        self.corsikaExe = corsikaExe
 
 
 
-    def writeFile(self, runNumber, log10_E1, azimuth, zenith, folder_path):
+    def writeFile(self, runNumber, log10_E1, azimuth, zenith, folder_path, antenna_type = "random"):
         """
         Creates and writes a Corsika inp file that can be used as Corsika input
         """
@@ -132,7 +136,7 @@ class FileWriter:
             folder_path = folder_path
         )
 
-        RadGen.writeReasList()
+        RadGen.writeReasList(antenna_type)
 
 
         # create the .sub and .sh file for each shower
@@ -143,8 +147,8 @@ class FileWriter:
             primary = self.primary,
             directory = self.directory,
             folder_path = folder_path,
-            pathCorsika = "/home/hk-project-radiohfi/bg5912/work/soft/corsika-77550/run/",
-            corsikaExe = "/mpi_corsika77550Linux_SIBYLL_urqmd_thin_coreas_parallel_runner",
+            pathCorsika = self.pathCorsika,
+            corsikaExe = self.corsikaExe,
         )
 
         SubGen.writeSubFiles()

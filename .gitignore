@@ -17,3 +17,10 @@ __pycache__
 .DS_Store
 
 *.pyc
+
+# images
+*.png
+
+# pypi stuff
+dist
+*.egg-info*
