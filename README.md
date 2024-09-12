@@ -4,8 +4,9 @@ Unleash the magic of simultaneous shower simulations with this Coreas generator.
 ### Authors
 Keito Watanabe @kwat0308\
 Jelena Köhler @jelenakhlr\
-original version by @fedbont94\
-forked from https://github.com/fedbont94/Horeka\
+original version by Federico Bontempo @fedbont94\
+forked from https://github.com/fedbont94/Horeka
+
 @date: September 2024
 
 ## Installation
