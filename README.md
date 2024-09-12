@@ -1,15 +1,12 @@
 # CoreasSpellcaster
 Unleash the magic of simultaneous shower simulations with this Coreas generator.
 
-### Author
+### Authors
 Keito Watanabe @kwat0308\
-@date: September 2024
-
-Forked from Jelena Köhler @jelenakhlr\
-@date: January 2024
-
+Jelena Köhler @jelenakhlr\
 original version by @fedbont94\
-forked from https://github.com/fedbont94/Horeka
+forked from https://github.com/fedbont94/Horeka\
+@date: September 2024
 
 ## Installation
 
