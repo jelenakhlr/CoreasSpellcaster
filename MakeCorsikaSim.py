@@ -242,7 +242,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--pathAntennas",
         type=str,
-        default="/home/hk-project-radiohfi/bg5912/CoreasSpellcaster/utils/gp300.list",
+        default="/home/hk-project-radiohfi/bg5912/CoreasSpellcaster/utils/aera.list",
         help="the directory where the antenna position file is located"
     )
 
