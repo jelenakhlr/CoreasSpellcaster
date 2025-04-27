@@ -16,11 +16,11 @@ cd /home/hk-project-radiohfi/bg5912/work/soft/corsika-77550/run/
 $PYTHON $SCRIPT \
                 --username bg5912 \
                 --primary 14 \
-                --dirSimulations "/home/hk-project-radiohfi/bg5912/work/sims/AERA_polarization_tests" \
+                --dirSimulations "/home/hk-project-radiohfi/bg5912/work/sims/AERA_polarization_tests/" \
                 --pathCorsika "/home/hk-project-radiohfi/bg5912/work/soft/corsika-77550/run/" \
                 --corsikaExe "/mpi_corsika77550Linux_SIBYLL_urqmd_thin_coreas_parallel_runner" \
                 --startNumber 0 \
-                --endNumber 1 \
+                --endNumber 20 \
                 --energyStart 8.0 \
                 --energyEnd 11.0 \
                 --energyStep 0.2 \
