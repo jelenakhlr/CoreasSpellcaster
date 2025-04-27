@@ -112,7 +112,7 @@ class FileWriter:
                 + f"PAROUT  T  F\n"# erster job: t f, danach f f 
                 + f"LONGI   T   5.     T       T\n"
                 + f"RADNKG  5.E+05\n"           
-                + f"ATMFILE {self.dirRun}/ATMOSPHERE_20170401120000_Dunhuang.DAT\n"
+                # + f"ATMFILE {self.dirRun}/ATMOSPHERE_20170401120000_Dunhuang.DAT\n"
                 + f"DIRECT  {folder_path}/\n"
                 + f"DATDIR  {self.dirRun}\n"
                 + f"USER    {self.username}\n"
